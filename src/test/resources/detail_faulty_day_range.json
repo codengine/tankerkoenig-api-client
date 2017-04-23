@@ -1,0 +1,34 @@
+{
+  "ok": true,
+  "license": "CC BY 4.0 -  https:\/\/creativecommons.tankerkoenig.de",
+  "data": "MTS-K",
+  "status": "ok",
+  "station": {
+    "id": "51d4b660-a095-1aa0-e100-80009459e03a",
+    "name": "JET BERLIN HERZBERGSTR. 27",
+    "brand": "JET",
+    "street": "HERZBERGSTR. 27",
+    "houseNumber": null,
+    "postCode": 10365,
+    "place": "BERLIN",
+    "openingTimes": [
+      {
+        "text": "Mo-Fo",
+        "start": "05:00:00",
+        "end": "23:00:00"
+      }
+    ],
+    "overrides": [
+      "13.01.2016, 08:00:00 - 13.01.2016, 19:00:00: geöffnet",
+      "13.02.2016, 08:00:00 - 13.02.2016, 19:00:00: geöffnet"
+    ],
+    "wholeDay": true,
+    "isOpen": true,
+    "e5": 1.009,
+    "e10": 1.009,
+    "diesel": 1.009,
+    "lat": 52.5262,
+    "lng": 13.4886,
+    "state": "deHE"
+  }
+}

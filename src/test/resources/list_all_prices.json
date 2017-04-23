@@ -1,0 +1,36 @@
+{
+  "ok": true,
+  "license": "CC BY 4.0 -  https:\/\/creativecommons.tankerkoenig.de",
+  "data": "MTS-K",
+  "status": "ok",
+  "stations": [
+    {
+      "id": "51d4b660-a095-1aa0-e100-80009459e03a",
+      "name": "JET BERLIN HERZBERGSTR. 27",
+      "brand": "JET",
+      "street": "HERZBERGSTR. 27",
+      "place": "BERLIN",
+      "lat": 52.5262,
+      "lng": 13.4886,
+      "dist": 3.5,
+      "e5": 1.289,
+      "e10": 1.269,
+      "isOpen": true,
+      "houseNumber": "",
+      "postCode": 10365
+    },
+    {
+      "id": "1c4f126b-1f3c-4b38-9692-05c400ea8e61",
+      "name": "Sprint Berlin Kniprodestr.",
+      "street": "Kniprodestr.",
+      "place": "Berlin",
+      "lat": 52.533901,
+      "lng": 13.4451,
+      "dist": 1.5,
+      "diesel": 1.029,
+      "e5": 1.289,
+      "houseNumber": "25",
+      "postCode": 10407
+    }
+  ]
+}
