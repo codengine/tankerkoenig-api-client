@@ -132,7 +132,7 @@ public class StationListJsonMappingTest extends MapperTest
    @Test
    public void listAllPrices() throws IOException
    {
-      final String listContent = ResourceLoader.readString("list_all_Prices.json");
+      final String listContent = ResourceLoader.readString("list_all_prices.json");
       final StationListResult stationList = getMapper().fromJson(listContent, StationListResult.class);
       final List<Station> stations = stationList.getStations();
       assertThat(stations).isNotNull().hasSize(2);
