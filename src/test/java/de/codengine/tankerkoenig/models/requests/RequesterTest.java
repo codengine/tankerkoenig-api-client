@@ -29,6 +29,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.argThat;
+import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.times;
@@ -43,6 +44,7 @@ import org.junit.Test;
 
 import de.codengine.tankerkoenig.client.ClientExecutor;
 import de.codengine.tankerkoenig.exception.ClientExecutorException;
+import de.codengine.tankerkoenig.exception.RequestParamException;
 import de.codengine.tankerkoenig.exception.RequesterException;
 import de.codengine.tankerkoenig.models.mapper.JsonMapper;
 import de.codengine.tankerkoenig.utils.FluentMap;
@@ -73,6 +75,27 @@ public class RequesterTest
    public void notFinal()
    {
       assertThat(Requester.class).isNotFinal();
+   }
+
+   @Test
+   public void exceptionThrownByClientExecutorIsCaught() throws RequesterException
+   {
+      when(clientExecutor.get(any(), any())).thenThrow(ClientExecutorException.class);
+      final RequestStub request = new RequestStub("123", "http://test/", requester);
+      assertThatThrownBy(() -> requester.execute(request, ResultStub.class))
+            .isExactlyInstanceOf(RequesterException.class)
+            .hasCauseExactlyInstanceOf(ClientExecutorException.class);
+   }
+
+   @Test
+   public void exceptionThrownByValidationIsCaught() throws RequesterException
+   {
+      final RequestStub request = mock(RequestStub.class);
+      doThrow(RequestParamException.class).when(request).validate();
+
+      assertThatThrownBy(() -> requester.execute(request, ResultStub.class))
+            .isExactlyInstanceOf(RequesterException.class)
+            .hasCauseExactlyInstanceOf(RequestParamException.class);
    }
 
    @Test
