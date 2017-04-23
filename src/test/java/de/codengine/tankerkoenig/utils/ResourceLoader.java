@@ -37,7 +37,8 @@ public class ResourceLoader
 
    public static String readString(String path) throws IOException
    {
-      File file = new File(ResourceLoader.class.getResource(path).getFile());
+      ClassLoader classLoader = ResourceLoader.class.getClassLoader();
+      File file = new File(classLoader.getResource(path).getFile());
       final byte[] content = Files.readAllBytes(file.toPath());
       return new String(content, Charset.forName("UTF-8"));
    }

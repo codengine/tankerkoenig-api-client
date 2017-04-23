@@ -53,7 +53,7 @@ public class DetailJsonMappingTest extends MapperTest
    @Test
    public void detail() throws IOException
    {
-      final String detailContent = ResourceLoader.readString("/detail.json");
+      final String detailContent = ResourceLoader.readString("detail.json");
       final StationDetailResult result = getMapper().fromJson(detailContent, StationDetailResult.class);
       assertThat(result.getStatus()).isPresent().hasValue(Result.ResponseStatus.OK);
       final Station station = result.getStation();
@@ -123,7 +123,7 @@ public class DetailJsonMappingTest extends MapperTest
    @Test
    public void detailWithoutTimes() throws IOException
    {
-      final String detailContent = ResourceLoader.readString("/detail_without_times.json");
+      final String detailContent = ResourceLoader.readString("detail_without_times.json");
       final StationDetailResult result = getMapper().fromJson(detailContent, StationDetailResult.class);
       assertThat(result.getStatus()).isPresent().hasValue(Result.ResponseStatus.OK);
       final Station station = result.getStation();
@@ -136,7 +136,7 @@ public class DetailJsonMappingTest extends MapperTest
    @Test
    public void detailWithFaultyDay() throws IOException
    {
-      final String detailContent = ResourceLoader.readString("/detail_faulty_day.json");
+      final String detailContent = ResourceLoader.readString("detail_faulty_day.json");
       assertThatThrownBy(() -> getMapper().fromJson(detailContent, StationDetailResult.class))
             .isExactlyInstanceOf(ResponseParsingException.class);
    }
@@ -144,7 +144,7 @@ public class DetailJsonMappingTest extends MapperTest
    @Test
    public void detailWithFaultyDayRange() throws IOException
    {
-      final String detailContent = ResourceLoader.readString("/detail_faulty_day_range.json");
+      final String detailContent = ResourceLoader.readString("detail_faulty_day_range.json");
       assertThatThrownBy(() -> getMapper().fromJson(detailContent, StationDetailResult.class))
             .isExactlyInstanceOf(ResponseParsingException.class);
    }
@@ -152,7 +152,7 @@ public class DetailJsonMappingTest extends MapperTest
    @Test
    public void withError() throws IOException
    {
-      final String complaintContent = ResourceLoader.readString("/fail_response.json");
+      final String complaintContent = ResourceLoader.readString("fail_response.json");
       final StationDetailResult result = getMapper().fromJson(complaintContent, StationDetailResult.class);
       assertDefaultFailedResponseAsserts(result);
       assertThat(result.getStation()).isNull();

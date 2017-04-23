@@ -56,7 +56,7 @@ public class GsonMapperTest
    @Test
    public void fromJson() throws IOException
    {
-      final String detailContent = ResourceLoader.readString("/detail.json");
+      final String detailContent = ResourceLoader.readString("detail.json");
       final JsonMapper mapper = GsonMapper.getInstance();
       final StationDetailResult result = mapper.fromJson(detailContent, StationDetailResult.class);
       assertThat(result).isNotNull();

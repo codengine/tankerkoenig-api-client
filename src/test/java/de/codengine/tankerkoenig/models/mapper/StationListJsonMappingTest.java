@@ -50,7 +50,7 @@ public class StationListJsonMappingTest extends MapperTest
    @Test
    public void listEmpty() throws IOException
    {
-      final String listContent = ResourceLoader.readString("/list_empty.json");
+      final String listContent = ResourceLoader.readString("list_empty.json");
       final StationListResult emptyStationList = getMapper().fromJson(listContent, StationListResult.class);
       assertThat(emptyStationList.getStations()).isNotNull().isEmpty();
       assertThatThrownBy(() -> emptyStationList.getStations().add(new Station()))
@@ -62,7 +62,7 @@ public class StationListJsonMappingTest extends MapperTest
    @Test
    public void listOnePrice() throws IOException
    {
-      final String listContent = ResourceLoader.readString("/list_one_price.json");
+      final String listContent = ResourceLoader.readString("list_one_price.json");
       final StationListResult stationList = getMapper().fromJson(listContent, StationListResult.class);
       final List<Station> stations = stationList.getStations();
       assertThat(stations).isNotNull().hasSize(2);
@@ -132,7 +132,7 @@ public class StationListJsonMappingTest extends MapperTest
    @Test
    public void listAllPrices() throws IOException
    {
-      final String listContent = ResourceLoader.readString("/list_all_Prices.json");
+      final String listContent = ResourceLoader.readString("list_all_Prices.json");
       final StationListResult stationList = getMapper().fromJson(listContent, StationListResult.class);
       final List<Station> stations = stationList.getStations();
       assertThat(stations).isNotNull().hasSize(2);
@@ -193,7 +193,7 @@ public class StationListJsonMappingTest extends MapperTest
    @Test
    public void withError() throws IOException
    {
-      final String complaintContent = ResourceLoader.readString("/fail_response.json");
+      final String complaintContent = ResourceLoader.readString("fail_response.json");
       final StationListResult result = getMapper().fromJson(complaintContent, StationListResult.class);
       assertDefaultFailedResponseAsserts(result);
    }

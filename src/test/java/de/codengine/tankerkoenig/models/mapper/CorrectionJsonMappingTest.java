@@ -45,7 +45,7 @@ public class CorrectionJsonMappingTest extends MapperTest
    @Test
    public void correction() throws IOException
    {
-      final String complaintContent = ResourceLoader.readString("/correction.json");
+      final String complaintContent = ResourceLoader.readString("correction.json");
       final CorrectionResult result = getMapper().fromJson(complaintContent, CorrectionResult.class);
       assertThat(result.getStatus()).isNotPresent();
       assertThat(result.getMessage()).isNotPresent();
@@ -57,7 +57,7 @@ public class CorrectionJsonMappingTest extends MapperTest
    @Test
    public void withError() throws IOException
    {
-      final String complaintContent = ResourceLoader.readString("/fail_response.json");
+      final String complaintContent = ResourceLoader.readString("fail_response.json");
       final CorrectionResult result = getMapper().fromJson(complaintContent, CorrectionResult.class);
       assertDefaultFailedResponseAsserts(result);
    }

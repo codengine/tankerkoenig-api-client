@@ -49,7 +49,7 @@ public class PricesJsonMappingTest extends MapperTest
    @Test
    public void prices() throws IOException
    {
-      final String pricesContent = ResourceLoader.readString("/prices.json");
+      final String pricesContent = ResourceLoader.readString("prices.json");
       final PricesResult result = getMapper().fromJson(pricesContent, PricesResult.class);
       final Map<String, GasPrices> gasPrices = result.getGasPrices();
 
@@ -89,7 +89,7 @@ public class PricesJsonMappingTest extends MapperTest
    @Test
    public void pricesEmpty() throws IOException
    {
-      final String pricesContent = ResourceLoader.readString("/prices_empty.json");
+      final String pricesContent = ResourceLoader.readString("prices_empty.json");
       final PricesResult result = getMapper().fromJson(pricesContent, PricesResult.class);
       final Map<String, GasPrices> gasPrices = result.getGasPrices();
       assertThat(gasPrices).isNotNull().isEmpty();
@@ -106,7 +106,7 @@ public class PricesJsonMappingTest extends MapperTest
    @Test
    public void withError() throws IOException
    {
-      final String complaintContent = ResourceLoader.readString("/fail_response.json");
+      final String complaintContent = ResourceLoader.readString("fail_response.json");
       final PricesResult result = getMapper().fromJson(complaintContent, PricesResult.class);
       assertDefaultFailedResponseAsserts(result);
    }

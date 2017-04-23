@@ -86,7 +86,7 @@ public class TankerkoenigTest
    @Test
    public void buildsDefaultClientExecutor() throws IOException
    {
-      final String detailContent = ResourceLoader.readString("/detail.json");
+      final String detailContent = ResourceLoader.readString("detail.json");
 
       final ClientExecutorFactory clientExecutorFactory = mock(ClientExecutorFactory.class);
       final ClientExecutor clientExecutor = mock(ClientExecutor.class);
@@ -118,7 +118,7 @@ public class TankerkoenigTest
    @Test
    public void buildsDefaultClientExecutorWithRealFactory() throws IOException, InterruptedException
    {
-      final String detailContent = ResourceLoader.readString("/detail.json");
+      final String detailContent = ResourceLoader.readString("detail.json");
 
       try (MockWebServer webServer = new MockWebServer())
       {
@@ -193,7 +193,7 @@ public class TankerkoenigTest
    @Test
    public void buildsDefaultClientExecutorIfNotExplicitlySet() throws IOException
    {
-      final String detailContent = ResourceLoader.readString("/detail.json");
+      final String detailContent = ResourceLoader.readString("detail.json");
 
       final ClientExecutorFactory clientExecutorFactory = mock(ClientExecutorFactory.class);
       final ClientExecutor clientExecutor = mock(ClientExecutor.class);
@@ -224,7 +224,7 @@ public class TankerkoenigTest
    @Test
    public void usesCustomExecutor() throws IOException
    {
-      final String detailContent = ResourceLoader.readString("/detail.json");
+      final String detailContent = ResourceLoader.readString("detail.json");
 
       ClientExecutor clientExecutor = mock(ClientExecutor.class);
       when(clientExecutor.get(any(), any())).thenReturn(detailContent);
@@ -301,7 +301,7 @@ public class TankerkoenigTest
          Request.Method method)
          throws IOException
    {
-      final String responseContent = ResourceLoader.readString("/" + jsonResultFile);
+      final String responseContent = ResourceLoader.readString("" + jsonResultFile);
 
       ClientExecutor clientExecutor = mock(ClientExecutor.class);
       if (method == Request.Method.GET)
