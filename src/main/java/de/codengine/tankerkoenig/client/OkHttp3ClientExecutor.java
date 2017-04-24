@@ -131,7 +131,7 @@ public final class OkHttp3ClientExecutor implements ClientExecutor
     * @return The response body
     * @throws ClientExecutorException Thrown if the API call unsuccessful or any other exception of the underlying client occured
     */
-   protected String executeRequest(final Request request) throws ClientExecutorException
+   private String executeRequest(final Request request) throws ClientExecutorException
    {
       try (final Response response = client.newCall(request).execute())
       {
