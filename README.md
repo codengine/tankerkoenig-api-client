@@ -46,6 +46,6 @@ License
     SOFTWARE.
 
 [1]: https://creativecommons.tankerkoenig.de
-[register]: https://creativecommons.tankerkoenig.de/#usage
+[register]: https://creativecommons.tankerkoenig.de/#register
 [wiki]: https://github.com/codengine/tankerkoenig-api/wiki
 [terms]: https://creativecommons.tankerkoenig.de/#usage
