@@ -12,7 +12,7 @@ Download
 
 Via Maven:
 
-```
+```xml
 <dependency>
     <groupId>de.codengine</groupId>
     <artifactId>tankerkoenig-api-client</artifactId>
