@@ -21,6 +21,12 @@ Via Maven:
 </dependency>
 ```
 
+Via Gradle:
+
+```groovy
+compile 'de.codengine:tankerkoenig-api-client:1.0'
+```
+
 Snapshots of the development version are available in [Sonatype's ``snapshots`` repository][sonasnaps].
 
 Obtaining an API Key
