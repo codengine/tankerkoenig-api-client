@@ -7,6 +7,21 @@ An API client for calling the [Tankerkoenig API][1] (Official Website: http://ww
 
 For more information see [the wiki][wiki].
 
+Download
+========
+
+Via Maven:
+
+```
+<dependency>
+    <groupId>de.codengine</groupId>
+    <artifactId>tankerkoenig-api-client</artifactId>
+    <version>1.0</version>
+</dependency>
+```
+
+Snapshots of the development version are available in [Sonatype's ``snapshots`` repository][sonasnaps].
+
 Obtaining an API Key
 --------------------
 
@@ -19,13 +34,13 @@ Be careful not to make your private API key publicly available!
 Terms of Usage
 --------------
 
-The [Terms of Usage][terms] of the API provider must be read and adhered to as defined on their website. The client does not provide any throtteling or control, so be careful about request limits!
+The [Terms of Usage][terms] of the API provider must be read and adhered to as defined on their website. The client does not provide any throtteling or control, so be careful about request limits which will result in a 503 Internal Server Error!
 
 License
 -------
     MIT License
     
-    Copyright (c) $today.year Stefan Hueg (Codengine)
+    Copyright (c) 2017 Stefan Hueg (Codengine)
     
     Permission is hereby granted, free of charge, to any person obtaining a copy
     of this software and associated documentation files (the "Software"), to deal
@@ -47,5 +62,6 @@ License
 
 [1]: https://creativecommons.tankerkoenig.de
 [register]: https://creativecommons.tankerkoenig.de/#register
-[wiki]: https://github.com/codengine/tankerkoenig-api/wiki
+[wiki]: https://github.com/codengine/tankerkoenig-api-client/wiki
 [terms]: https://creativecommons.tankerkoenig.de/#usage
+[sonasnaps]: https://oss.sonatype.org/content/repositories/snapshots/de/codengine/tankerkoenig-api-client/
