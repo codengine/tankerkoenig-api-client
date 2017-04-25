@@ -13,7 +13,7 @@
     "place": "BERLIN",
     "openingTimes": [
       {
-        "text": "Foo-Di",
+        "text": "t\u00e4glich ausser Feiertag",
         "start": "05:00:00",
         "end": "23:00:00"
       }

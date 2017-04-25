@@ -25,6 +25,8 @@
 package de.codengine.tankerkoenig.models.mapper;
 
 import java.time.DayOfWeek;
+import java.util.Objects;
+import java.util.Optional;
 import java.util.Set;
 
 /**
@@ -37,23 +39,41 @@ import java.util.Set;
  */
 public final class OpeningTime
 {
+   private final String text;
    private final Set<DayOfWeek> days;
    private final String start;
    private final String end;
+   private final boolean includesHolidays;
 
-   OpeningTime(final Set<DayOfWeek> days, final String start, final String end)
+   OpeningTime(final String text, final Set<DayOfWeek> days, final String start, final String end, final boolean includesHolidays)
    {
+      this.text = text;
       this.days = days;
       this.start = start;
       this.end = end;
+      this.includesHolidays = includesHolidays;
+   }
+
+   /**
+    * Returns the original string of the opening time, which is useful in case there was an error
+    * parsing the opening time the regular way
+    */
+   public String getText()
+   {
+      return text;
    }
 
    /**
     * Returns the unmodifyable set of days of the week for that the times are valid
     */
-   public Set<DayOfWeek> getDays()
+   public Optional<Set<DayOfWeek>> getDays()
    {
-      return days;
+      if (days == null || days.isEmpty())
+      {
+         return Optional.empty();
+      }
+
+      return Optional.of(days);
    }
 
    /**
@@ -72,6 +92,14 @@ public final class OpeningTime
       return end;
    }
 
+   /**
+    * Defines if the opening time includes holidays
+    */
+   public boolean includesHolidays()
+   {
+      return includesHolidays;
+   }
+
    @Override
    public boolean equals(final Object o)
    {
@@ -82,7 +110,11 @@ public final class OpeningTime
 
       final OpeningTime that = (OpeningTime) o;
 
-      if (getDays() != null ? !getDays().equals(that.getDays()) : that.getDays() != null)
+      if (getText() != null ? !getText().equals(that.getText()) : that.getText() != null)
+         return false;
+      if (!getDays().equals(that.getDays()))
+         return false;
+      if (!Objects.equals(includesHolidays(), that.includesHolidays()))
          return false;
       if (getStart() != null ? !getStart().equals(that.getStart()) : that.getStart() != null)
          return false;
@@ -92,7 +124,9 @@ public final class OpeningTime
    @Override
    public int hashCode()
    {
-      int result = getDays() != null ? getDays().hashCode() : 0;
+      int result = getText() != null ? getText().hashCode() : 0;
+      result = 31 * result + getDays().hashCode();
+      result = 31 * result + Boolean.hashCode(includesHolidays());
       result = 31 * result + (getStart() != null ? getStart().hashCode() : 0);
       result = 31 * result + (getEnd() != null ? getEnd().hashCode() : 0);
       return result;

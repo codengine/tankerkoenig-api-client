@@ -121,7 +121,7 @@ public class StationTest
    public void getOpeningTimes()
    {
       assertThat(station.getOpeningTimes()).isNotPresent();
-      final OpeningTime openingTime = new OpeningTime(Sets.newSet(DayOfWeek.MONDAY, DayOfWeek.TUESDAY), "12:00", "18:00");
+      final OpeningTime openingTime = new OpeningTime("test", Sets.newSet(DayOfWeek.MONDAY, DayOfWeek.TUESDAY), "12:00", "18:00", true);
       List<OpeningTime> openingTimes = Lists.newArrayList(openingTime);
       station.setOpeningTimes(openingTimes);
       assertThat(station.getOpeningTimes()).isPresent().hasValue(openingTimes);

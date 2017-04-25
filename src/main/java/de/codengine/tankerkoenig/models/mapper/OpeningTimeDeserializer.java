@@ -27,6 +27,7 @@ package de.codengine.tankerkoenig.models.mapper;
 import static de.codengine.tankerkoenig.models.mapper.GsonMapperUtil.getAsString;
 
 import java.lang.reflect.Type;
+import java.time.DateTimeException;
 import java.time.DayOfWeek;
 import java.util.Arrays;
 import java.util.Collections;
@@ -53,12 +54,59 @@ final class OpeningTimeDeserializer implements JsonDeserializer<OpeningTime>
       final String start = getAsString(jObject, "start");
       final String end = getAsString(jObject, "end");
       final String text = getAsString(jObject, "text");
-      final Set<DayOfWeek> days = text != null && !text.isEmpty() ? Collections.unmodifiableSet(parseDays(text)) : null;
 
-      return new OpeningTime(days, start, end);
+      Set<DayOfWeekWithHoliday> days = null;
+      boolean includesHolidays = false;
+
+      if (text != null && !text.isEmpty())
+      {
+         switch (text)
+         {
+            case "täglich ausser Feiertag":
+               days = allDays();
+               break;
+            case "täglich":
+               days = allDays();
+               includesHolidays = true;
+               break;
+            case "täglich ausser Sonn- und Feiertagen":
+               days = allDays();
+               days.remove(DayOfWeekWithHoliday.SUNDAY);
+               days.remove(DayOfWeekWithHoliday.HOLIDAY);
+               break;
+            default:
+               try
+               {
+                  days = parseDays(text);
+                  if (days != null && days.contains(DayOfWeekWithHoliday.HOLIDAY))
+                  {
+                     includesHolidays = true;
+                  }
+               }
+               catch (Exception e)
+               {
+                  days = null;
+               }
+               break;
+         }
+      }
+
+      final Set<DayOfWeek> daysOfWeek = convertDaysOfWeek(days);
+
+      return new OpeningTime(text, daysOfWeek, start, end, includesHolidays);
    }
 
-   private static Set<DayOfWeek> parseDays(final String text)
+   private static Set<DayOfWeek> convertDaysOfWeek(final Set<DayOfWeekWithHoliday> days)
+   {
+      final Set<DayOfWeek> converted = days == null ? null : days.stream()
+            .filter(dayOfWeekWithHoliday -> dayOfWeekWithHoliday != DayOfWeekWithHoliday.HOLIDAY)
+            .map(DayOfWeekWithHoliday::getDayOfWeek)
+            .collect(Collectors.toCollection(TreeSet::new));
+
+      return converted == null ? null : Collections.unmodifiableSet(converted);
+   }
+
+   private static Set<DayOfWeekWithHoliday> parseDays(final String text)
    {
       if (text.contains("-"))
       {
@@ -76,20 +124,26 @@ final class OpeningTimeDeserializer implements JsonDeserializer<OpeningTime>
             throw new ResponseParsingException(text, "Opening times");
          }
 
-         return new TreeSet<>(Collections.singletonList(DayOfWeek.of(dayAsInt)));
+         return new TreeSet<>(Collections.singletonList(DayOfWeekWithHoliday.of(dayAsInt)));
       }
    }
 
-   private static Set<DayOfWeek> parseDaysSeparated(final String text, final String delimiter)
+   private static Set<DayOfWeekWithHoliday> allDays()
    {
-      final String[] days = text.split(",");
-      return Arrays.stream(days).map(String::trim)
-            .map(OpeningTimeDeserializer::dayToInt)
-            .map(DayOfWeek::of)
+      return Arrays.stream(DayOfWeekWithHoliday.values())
             .collect(Collectors.toCollection(TreeSet::new));
    }
 
-   private static Set<DayOfWeek> parseDayRange(final String text)
+   private static Set<DayOfWeekWithHoliday> parseDaysSeparated(final String text, final String delimiter)
+   {
+      final String[] days = text.split(delimiter);
+      return Arrays.stream(days).map(String::trim)
+            .map(OpeningTimeDeserializer::dayToInt)
+            .map(DayOfWeekWithHoliday::of)
+            .collect(Collectors.toCollection(TreeSet::new));
+   }
+
+   private static Set<DayOfWeekWithHoliday> parseDayRange(final String text)
    {
       final String from = text.substring(0, text.indexOf("-"));
       final int fromInt = dayToInt(from);
@@ -105,10 +159,10 @@ final class OpeningTimeDeserializer implements JsonDeserializer<OpeningTime>
       return getDaysOfRange(fromInt, toInt);
    }
 
-   private static Set<DayOfWeek> getDaysOfRange(final int fromInt, final int toInt)
+   private static Set<DayOfWeekWithHoliday> getDaysOfRange(final int fromInt, final int toInt)
    {
       return IntStream.range(fromInt, toInt + 1)
-            .mapToObj(DayOfWeek::of)
+            .mapToObj(DayOfWeekWithHoliday::of)
             .collect(Collectors.toCollection(TreeSet::new));
    }
 
@@ -137,8 +191,45 @@ final class OpeningTimeDeserializer implements JsonDeserializer<OpeningTime>
          case "Sonntag":
          case "So":
             return 7;
+         case "Feiertag":
+            return 8;
          default:
             return -1;
+      }
+   }
+
+   public enum DayOfWeekWithHoliday
+   {
+      MONDAY(DayOfWeek.MONDAY),
+      TUESDAY(DayOfWeek.TUESDAY),
+      WEDNESDAY(DayOfWeek.WEDNESDAY),
+      THURSDAY(DayOfWeek.THURSDAY),
+      FRIDAY(DayOfWeek.FRIDAY),
+      SATURDAY(DayOfWeek.SATURDAY),
+      SUNDAY(DayOfWeek.SUNDAY),
+      HOLIDAY(null);
+
+      private static final DayOfWeekWithHoliday[] ENUMS = DayOfWeekWithHoliday.values();
+      private final DayOfWeek dayOfWeek;
+
+      DayOfWeekWithHoliday(final DayOfWeek sunday)
+      {
+
+         dayOfWeek = sunday;
+      }
+
+      public DayOfWeek getDayOfWeek()
+      {
+         return dayOfWeek;
+      }
+
+      public static DayOfWeekWithHoliday of(int dayOfWeek)
+      {
+         if (dayOfWeek < 1 || dayOfWeek > 8)
+         {
+            throw new DateTimeException("Invalid value for DayOfWeek: " + dayOfWeek);
+         }
+         return ENUMS[dayOfWeek - 1];
       }
    }
 }

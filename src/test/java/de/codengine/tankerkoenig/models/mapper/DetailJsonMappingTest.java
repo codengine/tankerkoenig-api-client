@@ -37,7 +37,6 @@ import java.util.Optional;
 import org.assertj.core.util.Sets;
 import org.junit.Test;
 
-import de.codengine.tankerkoenig.exception.ResponseParsingException;
 import de.codengine.tankerkoenig.models.requests.Result;
 import de.codengine.tankerkoenig.models.requests.StationDetailResult;
 import de.codengine.tankerkoenig.utils.ResourceLoader;
@@ -93,20 +92,24 @@ public class DetailJsonMappingTest extends MapperTest
       final List<OpeningTime> openingTimes = optOpeningTimes.get();
       assertThat(openingTimes).hasSize(4);
 
-      assertThatThrownBy(() -> openingTimes.add(new OpeningTime(Sets.newHashSet(), "1", "2")))
+      assertThatThrownBy(() -> openingTimes.add(new OpeningTime("test", Sets.newHashSet(), "1", "2", true)))
             .isInstanceOf(UnsupportedOperationException.class);
 
       final OpeningTime firstOpeningTime = openingTimes.get(0);
       assertOpeningTime(firstOpeningTime, "05:00:00", "23:00:00", DayOfWeek.MONDAY, DayOfWeek.TUESDAY);
+      assertThat(firstOpeningTime.includesHolidays()).isFalse();
 
       final OpeningTime secondOpeningTime = openingTimes.get(1);
       assertOpeningTime(secondOpeningTime, "05:00:00", "23:00:00", DayOfWeek.WEDNESDAY, DayOfWeek.THURSDAY);
+      assertThat(secondOpeningTime.includesHolidays()).isFalse();
 
       final OpeningTime thirdOpeningTime = openingTimes.get(2);
       assertOpeningTime(thirdOpeningTime, "05:00:00", "23:00:00", DayOfWeek.FRIDAY);
+      assertThat(thirdOpeningTime.includesHolidays()).isFalse();
 
       final OpeningTime fourthOpeningTime = openingTimes.get(3);
       assertOpeningTime(fourthOpeningTime, "06:00:00", "23:00:00", DayOfWeek.SATURDAY, DayOfWeek.SUNDAY);
+      assertThat(fourthOpeningTime.includesHolidays()).isTrue();
 
       final Optional<List<String>> optOverrides = station.getOverridingOpeningTimes();
       assertThat(optOverrides).isPresent();
@@ -134,19 +137,79 @@ public class DetailJsonMappingTest extends MapperTest
    }
 
    @Test
-   public void detailWithFaultyDay() throws IOException
+   public void detailWithFaultyDayThrowsNoException() throws IOException
    {
       final String detailContent = ResourceLoader.readString("detail_faulty_day.json");
-      assertThatThrownBy(() -> getMapper().fromJson(detailContent, StationDetailResult.class))
-            .isExactlyInstanceOf(ResponseParsingException.class);
+      final StationDetailResult stationDetailResult = getMapper().fromJson(detailContent, StationDetailResult.class);
+      final Optional<List<OpeningTime>> optOpeningTimes = stationDetailResult.getStation().getOpeningTimes();
+      assertThat(optOpeningTimes).isPresent();
+      final List<OpeningTime> openingTimes = optOpeningTimes.get();
+      assertThat(openingTimes).hasSize(1);
+      final OpeningTime openingTime = openingTimes.get(0);
+      assertThat(openingTime.getText()).isEqualTo("Foo");
+      assertThat(openingTime.getStart()).isEqualTo("05:00:00");
+      assertThat(openingTime.getEnd()).isEqualTo("23:00:00");
+      assertThat(openingTime.getDays()).isNotPresent();
+      assertThat(openingTime.includesHolidays()).isFalse();
    }
 
    @Test
-   public void detailWithFaultyDayRange() throws IOException
+   public void detailWithFaultyDayRangeThrowsNoException() throws IOException
    {
       final String detailContent = ResourceLoader.readString("detail_faulty_day_range.json");
-      assertThatThrownBy(() -> getMapper().fromJson(detailContent, StationDetailResult.class))
-            .isExactlyInstanceOf(ResponseParsingException.class);
+      final StationDetailResult stationDetailResult = getMapper().fromJson(detailContent, StationDetailResult.class);
+      final Optional<List<OpeningTime>> optOpeningTimes = stationDetailResult.getStation().getOpeningTimes();
+      assertThat(optOpeningTimes).isPresent();
+      final List<OpeningTime> openingTimes = optOpeningTimes.get();
+      assertThat(openingTimes).hasSize(1);
+      final OpeningTime openingTime = openingTimes.get(0);
+      assertThat(openingTime.getText()).isEqualTo("Foo-Di");
+      assertThat(openingTime.getStart()).isEqualTo("05:00:00");
+      assertThat(openingTime.getEnd()).isEqualTo("23:00:00");
+      assertThat(openingTime.getDays()).isNotPresent();
+      assertThat(openingTime.includesHolidays()).isFalse();
+   }
+
+   @Test
+   public void detailWithOpenedDaily() throws IOException
+   {
+      final String detailContent = ResourceLoader.readString("detail_opened_daily.json");
+      final StationDetailResult stationDetailResult = getMapper().fromJson(detailContent, StationDetailResult.class);
+      final Optional<List<OpeningTime>> optOpeningTimes = stationDetailResult.getStation().getOpeningTimes();
+      assertThat(optOpeningTimes).isPresent();
+      final List<OpeningTime> openingTimes = optOpeningTimes.get();
+      assertThat(openingTimes).hasSize(1);
+      final OpeningTime openingTime = openingTimes.get(0);
+      assertOpeningTime(openingTime, "05:00:00", "23:00:00", DayOfWeek.MONDAY, DayOfWeek.TUESDAY, DayOfWeek.WEDNESDAY, DayOfWeek.THURSDAY, DayOfWeek.FRIDAY, DayOfWeek.SATURDAY, DayOfWeek.SUNDAY);
+      assertThat(openingTime.includesHolidays()).isTrue();
+   }
+
+   @Test
+   public void detailWithOpenedDailyExceptHolidays() throws IOException
+   {
+      final String detailContent = ResourceLoader.readString("detail_opened_daily_except_holiday.json");
+      final StationDetailResult stationDetailResult = getMapper().fromJson(detailContent, StationDetailResult.class);
+      final Optional<List<OpeningTime>> optOpeningTimes = stationDetailResult.getStation().getOpeningTimes();
+      assertThat(optOpeningTimes).isPresent();
+      final List<OpeningTime> openingTimes = optOpeningTimes.get();
+      assertThat(openingTimes).hasSize(1);
+      final OpeningTime openingTime = openingTimes.get(0);
+      assertOpeningTime(openingTime, "05:00:00", "23:00:00", DayOfWeek.MONDAY, DayOfWeek.TUESDAY, DayOfWeek.WEDNESDAY, DayOfWeek.THURSDAY, DayOfWeek.FRIDAY, DayOfWeek.SATURDAY, DayOfWeek.SUNDAY);
+      assertThat(openingTime.includesHolidays()).isFalse();
+   }
+
+   @Test
+   public void detailWithOpenedDailyExceptHolidaysAndSundays() throws IOException
+   {
+      final String detailContent = ResourceLoader.readString("detail_opened_daily_except_holiday_and_sunday.json");
+      final StationDetailResult stationDetailResult = getMapper().fromJson(detailContent, StationDetailResult.class);
+      final Optional<List<OpeningTime>> optOpeningTimes = stationDetailResult.getStation().getOpeningTimes();
+      assertThat(optOpeningTimes).isPresent();
+      final List<OpeningTime> openingTimes = optOpeningTimes.get();
+      assertThat(openingTimes).hasSize(1);
+      final OpeningTime openingTime = openingTimes.get(0);
+      assertOpeningTime(openingTime, "05:00:00", "23:00:00", DayOfWeek.MONDAY, DayOfWeek.TUESDAY, DayOfWeek.WEDNESDAY, DayOfWeek.THURSDAY, DayOfWeek.FRIDAY, DayOfWeek.SATURDAY);
+      assertThat(openingTime.includesHolidays()).isFalse();
    }
 
    @Test

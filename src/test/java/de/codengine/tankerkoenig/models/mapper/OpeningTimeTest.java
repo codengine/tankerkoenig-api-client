@@ -27,6 +27,7 @@ package de.codengine.tankerkoenig.models.mapper;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import java.time.DayOfWeek;
+import java.util.HashSet;
 import java.util.Set;
 
 import org.junit.Test;
@@ -43,26 +44,51 @@ public class OpeningTimeTest
    }
 
    @Test
+   public void getText()
+   {
+      OpeningTime openingTime = new OpeningTime("foo", null, null, null, true);
+      assertThat(openingTime.getText()).isEqualTo("foo");
+   }
+
+   @Test
    public void getDays()
    {
       Set<DayOfWeek> days = Sets.newSet(DayOfWeek.MONDAY, DayOfWeek.TUESDAY);
 
-      OpeningTime openingTime = new OpeningTime(days, null, null);
-      assertThat(openingTime.getDays()).containsExactlyElementsOf(days);
+      OpeningTime openingTime = new OpeningTime(null, days, null, null, true);
+      assertThat(openingTime.getDays()).isPresent()
+            .hasValueSatisfying(dayOfWeeks -> assertThat(dayOfWeeks).containsExactlyElementsOf(days));
+   }
+
+   @Test
+   public void getDaysWithEmptyOrNull()
+   {
+      OpeningTime openingTime = new OpeningTime(null, null, null, null, true);
+      assertThat(openingTime.getDays()).isNotPresent();
+
+      OpeningTime openingTime2 = new OpeningTime(null, new HashSet<>(), null, null, true);
+      assertThat(openingTime2.getDays()).isNotPresent();
    }
 
    @Test
    public void getStart()
    {
-      OpeningTime openingTime = new OpeningTime(null, "12:00", null);
+      OpeningTime openingTime = new OpeningTime(null, null, "12:00", null, true);
       assertThat(openingTime.getStart()).isEqualTo("12:00");
    }
 
    @Test
    public void getEnd()
    {
-      OpeningTime openingTime = new OpeningTime(null, null, "18:00");
+      OpeningTime openingTime = new OpeningTime(null, null, null, "18:00", true);
       assertThat(openingTime.getEnd()).isEqualTo("18:00");
+   }
+
+   @Test
+   public void includesOpeningTimes()
+   {
+      OpeningTime openingTime = new OpeningTime(null, null, null, null, true);
+      assertThat(openingTime.includesHolidays()).isTrue();
    }
 
    @Test

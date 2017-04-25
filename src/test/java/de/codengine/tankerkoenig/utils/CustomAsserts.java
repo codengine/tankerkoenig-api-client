@@ -125,7 +125,7 @@ public class CustomAsserts
    {
       assertThat(openingTime.getStart()).isEqualTo(start);
       assertThat(openingTime.getEnd()).isEqualTo(end);
-      assertThat(openingTime.getDays()).containsExactly(weekDays);
+      assertThat(openingTime.getDays()).isPresent().hasValueSatisfying(dayOfWeeks -> assertThat(dayOfWeeks).containsExactly(weekDays));
    }
 
    public static void assertDefaultFailedResponseAsserts(Result result)
