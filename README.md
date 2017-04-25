@@ -1,7 +1,7 @@
 Tankerkoenig API
 ================
 
-[![Build Status](https://travis-ci.org/codengine/tankerkoenig-api.svg?branch=master)](https://travis-ci.org/codengine/tankerkoenig-api)
+[![Build Status](https://travis-ci.org/codengine/tankerkoenig-api-client.svg?branch=master)](https://travis-ci.org/codengine/tankerkoenig-api-client)
 
 An API client for calling the [Tankerkoenig API][1] (Official Website: http://www.tankerkoenig.de).
 
