@@ -3,6 +3,7 @@ Tankerkoenig API
 
 [![Build Status](https://travis-ci.org/codengine/tankerkoenig-api-client.svg?branch=master)](https://travis-ci.org/codengine/tankerkoenig-api-client)
 [![Dependency Status](https://www.versioneye.com/user/projects/58ff772d6ac171431cf95145/badge.svg?style=flat-square)](https://www.versioneye.com/user/projects/58ff772d6ac171431cf95145)
+[![GitHub release](https://img.shields.io/github/release/codengine/tankerkoenig-api-client.svg)](https://github.com/codengine/tankerkoenig-api-client/releases/latest) [![Github All Releases](https://img.shields.io/github/downloads/codengine/tankerkoenig-api-client/total.svg)](https://github.com/codengine/tankerkoenig-api-client/releases/latest)
 
 An API client for calling the [Tankerkoenig API][1] (Official Website: http://www.tankerkoenig.de).
 
