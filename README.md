@@ -2,6 +2,7 @@ Tankerkoenig API
 ================
 
 [![Build Status](https://travis-ci.org/codengine/tankerkoenig-api-client.svg?branch=master)](https://travis-ci.org/codengine/tankerkoenig-api-client)
+[![Coverage Status](https://coveralls.io/repos/github/codengine/tankerkoenig-api-client/badge.svg?branch=master)](https://coveralls.io/github/codengine/tankerkoenig-api-client?branch=master)
 [![Dependency Status](https://www.versioneye.com/user/projects/58ff772d6ac171431cf95145/badge.svg?style=flat-square)](https://www.versioneye.com/user/projects/58ff772d6ac171431cf95145)
 [![GitHub release](https://img.shields.io/github/release/codengine/tankerkoenig-api-client.svg)](https://github.com/codengine/tankerkoenig-api-client/releases/latest) [![Github All Releases](https://img.shields.io/github/downloads/codengine/tankerkoenig-api-client/total.svg)](https://github.com/codengine/tankerkoenig-api-client/releases/latest)
 [![Maven Central](https://img.shields.io/maven-central/v/de.codengine/tankerkoenig-api-client.svg)](https://mvnrepository.com/artifact/de.codengine/tankerkoenig-api-client/latest)
