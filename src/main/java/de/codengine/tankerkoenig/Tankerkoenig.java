@@ -58,7 +58,7 @@ public final class Tankerkoenig
    {
       private String apiKey;
       private ClientExecutor clientExecutor;
-      private ClientExecutorFactory clientExecutorFactory;
+      private final ClientExecutorFactory clientExecutorFactory;
       private final String baseUrl;
 
       /**

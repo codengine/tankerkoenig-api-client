@@ -123,6 +123,8 @@ public final class CorrectionRequest extends BaseRequest<CorrectionResult>
          case WRONG_PETROL_STATION_LOCATION:
             RequestParamValidator.isLocationData(correctionValue);
             break;
+         default:
+            break;
       }
    }
 

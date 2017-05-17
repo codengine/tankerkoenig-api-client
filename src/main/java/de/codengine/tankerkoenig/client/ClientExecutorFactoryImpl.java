@@ -31,7 +31,7 @@ import okhttp3.OkHttpClient;
  */
 public final class ClientExecutorFactoryImpl implements ClientExecutorFactory
 {
-   private static ClientExecutorFactoryImpl ourInstance = new ClientExecutorFactoryImpl();
+   private static final ClientExecutorFactoryImpl ourInstance = new ClientExecutorFactoryImpl();
 
    private ClientExecutorFactoryImpl()
    {
